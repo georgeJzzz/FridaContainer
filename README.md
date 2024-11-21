@@ -4,6 +4,41 @@ FridaContainer 整合了网上流行的和自己编写的常用的 frida 脚本�
 
 npm build 后，用 Pycharm 打开编辑，可以看到 frida api 代码补全提示。
 
+## 0. 手机开发环境部署
+如果你的手机已经启动了frida-server，可以忽略这步。
+
+注意:部分手机出现部署之后adb连不上的问题，那请使用deploy2.sh。
+
+```shell
+#以piexl2为例
+stephen@ubuntu:~/hooker$ adb push mobile-deploy/ /sdcard/
+stephen@ubuntu:~/hooker$ adb shell #进入手机命令行界面
+sailfish:/ $ su #进入root权限命令行模式
+sailfish:/ $ sh /sdcard/mobile-deploy/deploy.sh                                                            
+disable android firewall.
+start frida-server
+start network adb.
+deploy successfull.
+stephen@ubuntu:~/hooker$ #如果你看到你的adb命令被弹出来了，表示已经正常部署。
+```
+![部署演示](assets/hooker-deploy.gif)
+***
+
+### 5. 指定fridaserver端口的手机开发环境部署
+
+```shell
+stephen@ubuntu:~/hooker$ adb shell #进入手机命令行界面
+sailfish:/ $ su #进入root权限命令行模式
+sailfish:/ $ sh /sdcard/mobile-deploy/deploy.sh 6666  #deploy.sh启动失败的同样可以尝试deploy2.sh                                                   
+disable android firewall.
+set firda_server_bind_port to 6666
+start frida-server
+start network adb.
+deploy successfull.
+stephen@ubuntu:~/hooker$ #如果你看到你的adb命令被弹出来了，表示已经正常部署。
+```
+***
+
 
 ## 1. 编译和使用
 

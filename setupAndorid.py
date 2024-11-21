@@ -10,4 +10,6 @@ import os
 
 if __name__ == '__main__':
     os.system('adb push utils/android/libs/gson-2.8.6.jar /data/local/tmp/fclibs/gson.jar')
+    # adb push mobile-deploy/ /sdcard/
+    os.system('adb push mobile-deploy/ /sdcard/')
     pass

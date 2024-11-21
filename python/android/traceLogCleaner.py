@@ -19,10 +19,10 @@ import frida
 
 
 class TraceLogCleaner:
-
     '''
     @bFmt 是否以格式化方式记录日志
     '''
+
     def __init__(self, bFmt):
         self.saveDir = 'tdc_dir'
         self.bFmt = bFmt
@@ -125,7 +125,7 @@ class TraceLogCleaner:
             self.mkdirSaveDir()
             dev = frida.get_usb_device()
             app = dev.get_frontmost_application()
-            print (app)
+            print(app)
             session = dev.attach(app.pid)
             script = session.create_script(jscode, runtime="v8")
             # session.enable_jit()
@@ -151,7 +151,7 @@ class TraceLogCleaner:
                 if 'retval' in jobj:
                     tryblock = ''
                     if 'p0' in tryval:
-                        tryblock = '\n|(str)== \"{trystr}\"\n|(hex)== {tryhex}'\
+                        tryblock = '\n|(str)== \"{trystr}\"\n|(hex)== {tryhex}' \
                             .format(trystr=tryval['p0']['trystr'], tryhex=tryval['p0']['tryhex'])
                     vals = '|= {retval}{tryblock}'.format(retval=str(jobj['retval']), tryblock=tryblock)
                 else:
@@ -168,14 +168,15 @@ class TraceLogCleaner:
                     if isinstance(arg, list):
                         pkey = 'p%d' % i
                         if pkey in tryval:
-                            tryblock = '\n|(str)-- \"{trystr}\"\n|(hex)-- {tryhex}'\
+                            tryblock = '\n|(str)-- \"{trystr}\"\n|(hex)-- {tryhex}' \
                                 .format(trystr=tryval[pkey]['trystr'], tryhex=tryval[pkey]['tryhex'])
                     tmp = '|- {arg}{tryblock}'.format(arg=str(arg), tryblock=tryblock)
                     vals.append(tmp)
             except:
                 print('except entry:', json.dumps(jobj))
             vals = '\n'.join(vals)
-        fmt = '[+] ({status}) {clsname}\n|-> {methodname}\n{vals}'.format(status=status, clsname=jobj['classname'], methodname=jobj['method'], vals=vals)
+        fmt = '[+] ({status}) {clsname}\n|-> {methodname}\n{vals}'.format(status=status, clsname=jobj['classname'],
+                                                                          methodname=jobj['method'], vals=vals)
         return fmt
 
     def getJniFormatString(self, jobj):
@@ -186,18 +187,20 @@ class TraceLogCleaner:
 
             argsfmt = []
             for arg in jnival['args']:
-                tmp = '|- {argType}\t\t: {argValue}'.format(argType=arg['argType'].ljust(10, ' '), argValue=arg['argVal'].strip())
+                tmp = '|- {argType}\t\t: {argValue}'.format(argType=arg['argType'].ljust(10, ' '),
+                                                            argValue=arg['argVal'].strip())
                 argsfmt.append(tmp)
 
             backtraceFmt = []
             try:
                 for bt in backtrace:
-                    tmp = '|-> {address}: ({module_name}:{module_base}) {path}'\
-                        .format(address=bt['address'],  module_name=bt['module']['name'], module_base=bt['module']['base'], path=bt['module']['path'])
+                    tmp = '|-> {address}: ({module_name}:{module_base}) {path}' \
+                        .format(address=bt['address'], module_name=bt['module']['name'],
+                                module_base=bt['module']['base'], path=bt['module']['path'])
                     backtraceFmt.append(tmp)
             except:
                 pass
-            fmt = '[+] {methodname}\n{args}\n|= {retType}\t\t: {retValue}\n|-> BackTrace: \n{backtraceFmt}'\
+            fmt = '[+] {methodname}\n{args}\n|= {retType}\t\t: {retValue}\n|-> BackTrace: \n{backtraceFmt}' \
                 .format(methodname=data['methodname'], args='\n'.join(argsfmt),
                         retType=jnival['ret']['retType'].ljust(10, ' '), retValue=jnival['ret']['retVal'].strip(),
                         backtraceFmt='\n'.join(backtraceFmt))
@@ -205,7 +208,6 @@ class TraceLogCleaner:
             print('except:' + json.dumps(jobj))
             return ""
         return fmt
-
 
 
 if __name__ == '__main__':
@@ -216,4 +218,4 @@ if __name__ == '__main__':
 
     # tdc.washFile(path='tdc_dir/test_31523')
 
-    print ('done !')
+    print('done !')
